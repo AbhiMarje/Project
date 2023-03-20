@@ -1,4 +1,5 @@
 const sql = require('../connection.js');
+const shortid = require('shortid');
 const express = require('express');
 const router = express.Router();
 
@@ -55,17 +56,19 @@ router.get("/api/loginUser", async (req, res) => {
 
 router.post("/api/registerUser", async (req, res) => {
     try {
-        const { id, name, phnNo, email, password, age, gender } = req.body;
+        const { name, phnNo, email, password, age, gender } = req.body;
 
-        if (!id || !name || !phnNo || !email || !password || !age || !gender) {
+        if (!name || !phnNo || !email || !password || !age || !gender) {
             res.status(400).send({err: "Please fill all the details"});
         } else {
 
-            await sql.query(`insert into users values(${id}, '${name}', ${phnNo}, '${email}', '${password}', ${age}, '${gender}')`, (err, data) => {
+            await sql.query(`insert into users values('${shortid.generate()}', '${name}', ${phnNo}, '${email}', '${password}', ${age}, '${gender}')`, (err, data) => {
                 if (err) {
                     res.status(400).send({err: 'Something went wrong!'});
-                }  else {
-                    res.send({message: data})
+                }  else if (data.affectedRows === 1){
+                    res.status(200).send({message: 'Registration Successfull!'})
+                } else {
+                    res.status(400).send({err: 'Registration Failed!'})
                 }
             })
         }
