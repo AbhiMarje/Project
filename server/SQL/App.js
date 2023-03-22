@@ -6,6 +6,7 @@ const app = express();
 
 app.use(express.json());
 app.use(require('./Routers/Login/Login.js'));
+app.use(require('./Routers/Search/Search.js'))
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
