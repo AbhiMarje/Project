@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/api/getUser", async (req, res) => {
     try {
-        const { id } = req.body;
+        const { id } = req.query;
         if (!id) {
             res.status(400).send({err: 'Please provide user ID'});
         } else {
@@ -22,13 +22,13 @@ router.get("/api/getUser", async (req, res) => {
         }
 
     } catch (error) {
-        res.status(400).json({err: 'Something went wrong please try again!'})
+        res.status(400).send({err: 'Something went wrong please try again!'})
     }
 })
 
 router.get("/api/loginUser", async (req, res) => {
     try {
-        const { email, pass } = req.body;
+        const { email, pass } = req.query;
         if (!email || !pass) {
             res.status(400).send({err: 'Please provide email and password'});
         } else {
@@ -49,7 +49,7 @@ router.get("/api/loginUser", async (req, res) => {
         }
         
     } catch (error) {
-        res.status(400).json({err: 'Something went wrong please try again!'})
+        res.status(400).send({err: 'Something went wrong please try again!'})
     }
 
 })
@@ -74,7 +74,7 @@ router.post("/api/registerUser", async (req, res) => {
         }
         
     } catch (error) {
-        res.status(400).json({err: 'Something went wrong please try again!'})
+        res.status(400).send({err: 'Something went wrong please try again!'})
     }
 })
 

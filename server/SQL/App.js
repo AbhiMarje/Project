@@ -1,11 +1,11 @@
 require("dotenv").config({ path: `../config/.env.SQL` });
-require('./APIs/connection')
+require('./Routers/connection')
 
 const express = require('express');
 const app = express();
 
 app.use(express.json());
-app.use(require('./APIs/Login/Login.js'));
+app.use(require('./Routers/Login/Login.js'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
