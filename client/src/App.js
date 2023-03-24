@@ -1,9 +1,12 @@
+import React from 'react';
 import './App.css';
+import Login from './components/Login';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      Base app
+    <div>
+      base app
+      <Login />
     </div>
   );
 }
