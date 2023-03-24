@@ -1,4 +1,5 @@
 const express = require('express');
+const shortid = require('shortid');
 const router = express.Router();
 
 const users = require("../../Models/User");
@@ -10,8 +11,8 @@ router.get('/getUser', async (req, res) => {
         if (!id) {
             res.status(400).send({err: "Please enter a user ID."});
         } else {
-            console.log(req.query.userId);
-            const user = await users.findOne({ userId: id });
+
+            const user = await users.findOne({ _id: id });
                 if (!user) {
                     res.status(404).send({err: 'User not found'});
                 } else {
@@ -51,15 +52,13 @@ router.get('/loginUser', async (req, res) => {
 
 router.post('/registerUser', async (req, res) => {
     try {
-        const { userId, name, email, password, phnNo, age, gender } = req.body;
+        const { name, email, password, phnNo, age, gender } = req.body;
 
-        console.log(req.body);
-
-        if (!userId ||!name ||!email ||!password ||!phnNo ||!age ||!gender) {
+        if (!name ||!email ||!password ||!phnNo ||!age ||!gender) {
             res.status(400).send({err: "Please enter all fields."});
         } else {
             const newUser = new users({
-                userId: userId,
+                _id: shortid.generate(),
                 name: name,
                 email: email,
                 password: password,
