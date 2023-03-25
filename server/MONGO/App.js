@@ -9,7 +9,14 @@ const app = express();
 
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(require('./Routers/Login/Login.js'))
+
+app.use('/api/auth/', (req, res, next) => {
+    console.log("auth called");
+    next();
+});
+app.use(require('./Routers/Users/Users.js'));
+app.use(require('./Routers/Flights/Flights.js'));
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
