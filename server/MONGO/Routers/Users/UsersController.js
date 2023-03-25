@@ -1,6 +1,8 @@
+require("dotenv").config({ path: `../../../config/.env.MONGO`});
 const users = require("../../Models/User");
 const shortid = require('shortid');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.getUser = async (req, res) => {
     try {
@@ -38,12 +40,24 @@ exports.loginUser = async (req, res) => {
                 res.status(404).send({err: 'User not found'});
             } else {
 
-                bcrypt.compare(password, user.password, (err, isMatch) => {
+                bcrypt.compare(password, user.password, async (err, isMatch) => {
 
                     if (err) {
                         res.status(400).send({err: err.message});
                     } else if (isMatch) {
-                        res.status(200).send({message: "Login Successfull"});
+
+                        jwt.sign({
+                            _id: user._id,
+                            name: user.name,
+                            email: user.email  
+                        }, process.env.JWT_KEY, { expiresIn: "1h" }, (err, token) => {
+                            if (err) {
+                                res.status(400).send({ err: err.message });
+                            } else {
+                                res.status(200).send({ message: "Login Successfull", token: token });
+                            }
+                        })
+
                     } else if (!isMatch) {
                         res.status(400).send({err: 'Incorrect password'});
                     }

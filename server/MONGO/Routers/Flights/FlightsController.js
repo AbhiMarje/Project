@@ -10,7 +10,7 @@ exports.getFlights =  async (req, res) => {
            
             const flightsData = await flights.find({fromCity: fromCity, toCity: toCity, flDate: new Date(flDate)});
             
-            if(!flightsData) {
+            if(!flightsData[0]) {
                 res.status(404).send({ err: 'No flights found!'});
             } else {
                 res.status(200).send({ message: flightsData });
