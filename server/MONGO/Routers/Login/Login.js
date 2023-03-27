@@ -6,7 +6,7 @@ const users = require("../../Models/User");
 
 router.get('/getUser', async (req, res) => {
     try {
-        const id = req.query.userId;
+        const id = req.query.id;
 
         if (!id) {
             res.status(400).send({err: "Please enter a user ID."});
