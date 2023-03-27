@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-const searchController = require('./FlightsController');
+const flightsController = require('./FlightsController');
 
-router.get('/api/auth/getFlights', searchController.getFlights);
+router.get('/api/auth/getFlights', flightsController.getFlights);
 
-router.get('/api/auth/getFlightInfo', searchController.getFlightInfo);
+router.get('/api/auth/getFlightInfo', flightsController.getFlightInfo);
 
-router.post('/api/auth/addFlightInfo', searchController.addFlightInfo);
+router.post('/api/auth/addFlightInfo', flightsController.addFlightInfo);
 
-router.post('/api/auth/addFlight', searchController.addFlight);
+router.post('/api/auth/addFlight', flightsController.addFlight);
 
-router.delete('/api/auth/deleteFlight', searchController.deleteFlight);
+router.delete('/api/auth/deleteFlight', flightsController.deleteFlight);
 
-router.delete('/api/auth/deleteFlightInfo', searchController.deleteFlightInfo);
+router.delete('/api/auth/deleteFlightInfo', flightsController.deleteFlightInfo);
 
-router.put('/api/auth/updateFlight', searchController.updateFlight);
+router.put('/api/auth/updateFlight', flightsController.updateFlight);
 
 module.exports = router;
