@@ -1,4 +1,4 @@
-require("dotenv").config({ path: `../config/.env.SQL` });
+require("dotenv").config({ path: `../config/.env.MONGO` });
 const connectDB = require('./Routers/connections');
 const bodyParser = require('body-parser');
 
@@ -9,7 +9,12 @@ const app = express();
 
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(require('./Routers/Login/Login.js'))
+
+const checkAuth = require('./Middlewares/checkAuth');
+app.use('/api/auth/', checkAuth.validate);
+app.use(require('./Routers/Users/Users.js'));
+app.use(require('./Routers/Flights/Flights.js'));
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

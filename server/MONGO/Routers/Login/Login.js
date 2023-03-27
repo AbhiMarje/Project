@@ -75,5 +75,3 @@ router.post('/registerUser', async (req, res) => {
         res.status(400).send({err: error})
     }
 })
-
-module.exports = router;
