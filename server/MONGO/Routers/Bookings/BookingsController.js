@@ -30,9 +30,9 @@ exports.bookFlight = async (req, res) => {
 
         console.log(req.body);
 
-        const { tDate, userId, seatNo, flNo, price, status } = req.body;
+        const { tDate, userId, seatNo, flNo, price, status, name, age, email } = req.body;
 
-        if (!tDate || !userId || !seatNo || !flNo || !price || !status) {
+        if (!tDate || !userId || !seatNo || !flNo || !price || !status || !name || !email || !age) {
             res.status(400).json({ err: 'All fields are required' });
         } else {
 
@@ -41,6 +41,9 @@ exports.bookFlight = async (req, res) => {
                 tDate: tDate,
                 userId: userId,
                 seatNo: seatNo,
+                name: name,
+                age: age,
+                email: email,
                 flNo: flNo,
                 price: price,
                 status: status

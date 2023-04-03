@@ -7,6 +7,7 @@ import Home from './components/Home/Home';
 
 import Flights from './components/Flights/Flights';
 import Register from './components/Register';
+import Form from './components/Form';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Login />} />
           <Route path='/home' element={<Home />} />
+          <Route path='/form' element={<Form />} />
           <Route path='/register' element={<Register />} />
           <Route path='/flights' element={<Flights />} />
           <Route path='/flightInfo' element={<FlightInfo />} />

@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react'
 import available from './seat-available.png';
 import selected from './seat-selected.png';
 import bookedSeat from './seat-booked.png';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlane ,faBook, faPlaneDeparture, faPlaneArrival, faCalendarDays} from '@fortawesome/free-solid-svg-icons'
 import './Home/header.css'
 
 
 const FlightInfo = () => {
+
+  const navigate = useNavigate();
 
   const [flight, setFlight] = useState("");
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -51,42 +53,9 @@ const FlightInfo = () => {
   
   }
 
-  const handleBook = async () => {
-    window.alert("Do you like to book " + `${selectedSeats.length}` + " seats?")
-
-    selectedSeats.map( async (v, i) => {
-      const response  = await fetch(
-        "http://127.0.0.1:5000/api/auth/bookFlight",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-          },
-          body: JSON.stringify({
-              tDate: Date.now(),
-              userId: "eetrmydn",
-              seatNo: v,
-              flNo: flight.flNo,
-              price: flight.price,
-              status: "booked"
-          })
-        })
-
-        const res = await response.json();
-
-        console.log(res);
-
-        if (res.err) {
-          window.alert(res.err);
-        } else {
-          window.alert(res.message + " for seat no: " + v);
-        }
-    })
-    
-
+  const handleBook = () => {
+    navigate('/form', {state: {flight: flight, token: token, selectedSeats: selectedSeats[0]}})
   }
-
 
 
   return (
