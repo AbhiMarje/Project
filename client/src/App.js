@@ -1,12 +1,11 @@
 import React from 'react';
 import './App.css';
-import Login from './components/Login';
+import FlightInfo from './components/FlightInfo';
 
 const App = () => {
   return (
-    <div>
-      base app
-      <Login />
+    <div className='app'>
+      <FlightInfo />
     </div>
   );
 }
