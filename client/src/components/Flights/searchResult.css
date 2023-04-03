@@ -1,0 +1,60 @@
+.searchResult{
+    border: 1px solid lightgray;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    color: black;
+    justify-content: space-between;
+    gap: 20px; 
+    margin-bottom: 20px;
+}
+
+.srDesc>span{
+    font-size: 15px;
+}
+
+.srFligthId{
+    color: gray;
+}
+
+.srTitle{
+    font-size: 20px;
+}
+
+.srDetailsText{
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap:5px
+}
+
+.srPrice{
+    font-size: 25px;
+}
+
+.srShowDetails{
+    background: #D13140;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.srDesc{
+    display: flex;
+    flex-direction: column;
+    flex:3;
+    gap:5px;
+}
+
+.srDetails{
+    flex:1;
+}
+
+.srImg{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}

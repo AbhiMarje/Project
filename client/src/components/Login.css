@@ -1,0 +1,88 @@
+.Card {
+    height: auto;
+    background-color: transparent;
+    backdrop-filter: blur(15px);
+    padding-bottom: 1cm;
+    padding-left: 2cm;
+    padding-right: 2cm;
+    padding-top: 1cm;
+    width: 15cm;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: x-large;
+    margin: auto;
+    border-radius: 50px;
+    box-shadow: 5px 5px 50px  rgb(0 0 0 / 0.2);;
+}
+
+
+.l{
+    color: darkslategrey;
+    font-style: oblique;
+    text-align: center;
+    text-shadow: white;
+    font-size: xx-large;
+}
+
+.b {
+    background-image: url('https://wallpapers.com/images/featured/airport-background-w6v47yjhxcohsjgf.webp' ); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: whitesmoke;
+    font-family:'Montserrat', sans-serif;
+}
+
+/* .Name, .UName, .Email, .Password {
+    border-color: paleturquoise;
+    padding : 1px;
+    border-radius: 200px;
+    background-color: white;
+    width: 12cm;
+    text-align: center;
+    margin: 2px;
+}
+*/
+/* select{
+    background-color: rgba(255, 255, 255, 0.397);
+    margin-bottom: 0.5cm;
+    font-size: large ;
+    opacity: 90%;
+    font-style: italic;
+    color:rgba(51, 25, 25, 0.5);
+
+} */
+
+/* select::selection {
+    background-color: rgba(255, 255, 255, 0.397);
+    opacity: 90%;
+    color: rgba(51, 25, 25, 0.5);
+} */
+
+.in::placeholder {
+    color: rgba(51, 25, 25, 0.5);
+    font-style: italic;
+  }
+
+.in {
+    border-width: 2px;
+    font-size: large;
+    border-radius: 15px;
+    font-style: 'Montserrat', sans-serif;
+    height: auto;
+    width: auto;
+    opacity: 90%;
+    background-color: rgba(255, 255, 255, 0.397);
+    border-color: transparent;
+    padding: 10px;
+    margin-top:2px;
+    margin-bottom: 5px;
+    color: darkslategray;
+}
+
+.in:hover{
+    background-color: #c7daea;
+}
+
+.but:hover {
+    background-color: #c7daea;
+}

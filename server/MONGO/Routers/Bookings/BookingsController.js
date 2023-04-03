@@ -28,6 +28,8 @@ exports.getBookings = async (req, res) => {
 exports.bookFlight = async (req, res) => {
     try {
 
+        console.log(req.body);
+
         const { tDate, userId, seatNo, flNo, price, status } = req.body;
 
         if (!tDate || !userId || !seatNo || !flNo || !price || !status) {
@@ -55,7 +57,7 @@ exports.bookFlight = async (req, res) => {
 
                 if (update.modifiedCount > 0) {
                     await book.save();
-                    res.status(200).json({ messaage: "Flight booked successfully!" });
+                    res.status(200).json({ message: "Flight booked successfully!" });
                 } else {
                     res.status(404).json({ err: 'Flight not found' });
                 }

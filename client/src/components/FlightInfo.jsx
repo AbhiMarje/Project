@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
 import available from './seat-available.png';
 import selected from './seat-selected.png';
 import bookedSeat from './seat-booked.png';
+import { useLocation } from 'react-router-dom';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faPlane ,faBook, faPlaneDeparture, faPlaneArrival, faCalendarDays} from '@fortawesome/free-solid-svg-icons'
+import './Home/header.css'
+
 
 const FlightInfo = () => {
 
@@ -11,9 +15,12 @@ const FlightInfo = () => {
 
   const [selectedCat, setSelectedCat] = useState("");
   const [services, setServices] = useState([]);
-  
-  const seats = [{type: "Available"}, {type: "Booked by other"}, {type: "Selected by you"}];
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJRd2g3eUNqSS0iLCJuYW1lIjoieHl6IiwiZW1haWwiOiJhYmNkQGciLCJpYXQiOjE2ODA0MTc3NjksImV4cCI6MTY4MDQyMTM2OX0.KGOueWBhd6TqSpWdy5r4NEcioKK0ouR8K3q-Md5BpMQ"
+
+  const location = useLocation();
+
+  const token = location.state.token;
+
+  console.log(token);
 
   useEffect(() => {
     getFlightInfo();
@@ -21,31 +28,61 @@ const FlightInfo = () => {
   }, []);
 
   const getFlightInfo = async () => {
-    const response = await axios(
-      {
-        method: "GET",
-        url: "http://127.0.0.1:5000/api/auth/getFlightInfo",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token
-        },
-        params: {
-          "flNo": "ACA1"
-        }
+    const response = await fetch(
+        "http://127.0.0.1:5000/api/auth/getFlightInfo?flNo=ACA1",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          }
       })
 
-      const res = response.data.message;
+      const res = await response.json();
 
-      setFlight(res);
-      setServices(res.services)
+      if (res.err) {
+        alert(res.err);
+      } else {
+        setFlight(res.message);
+        setServices(res.message.services);
+      }
+
       console.log(res);
   
   }
 
-  const handleBook = () => {
+  const handleBook = async () => {
     window.alert("Do you like to book " + `${selectedSeats.length}` + " seats?")
 
+    selectedSeats.map( async (v, i) => {
+      const response  = await fetch(
+        "http://127.0.0.1:5000/api/auth/bookFlight",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify({
+              tDate: Date.now(),
+              userId: "eetrmydn",
+              seatNo: v,
+              flNo: flight.flNo,
+              price: flight.price,
+              status: "booked"
+          })
+        })
 
+        const res = await response.json();
+
+        console.log(res);
+
+        if (res.err) {
+          window.alert(res.err);
+        } else {
+          window.alert(res.message + " for seat no: " + v);
+        }
+    })
     
 
   }
@@ -53,47 +90,69 @@ const FlightInfo = () => {
 
 
   return (
-    <div className='info-container d-flex justify-content-between h-100 pt-3'>
-      <div className='d-flex flex-column w-25 h-100'>
-      <section className="types d-inline-block w-auto h-50 m-4 shadow-lg p-3 bg-white rounded">
-        <div className="types-container h-100 d-flex justify-content-around align-items-center">
-          <div className="types-card h-100 d-flex justify-content-around align-items-center flex-column">
-            {seats.map((seat, i) => {
-              return (
-                <div key={i} className="types-card-content">
-                  <span className="types-card-content-text">{seat.type}</span>
-                </div>
-              )
-            })}
+    <div>
+      <div className="headerList bg-danger p-3" style={{color: "white"}}>
+          <div className="headerListItem active">
+          <FontAwesomeIcon icon={faPlane} />
+          <span>Flights</span>
           </div>
-        </div>
-      </section>
-      <section className="services d-inline-block w-auto h-50 m-4 shadow-lg p-3 mb-5 bg-white rounded">
-      <div className="services-container h-100 d-flex justify-content-around align-items-center">
-          <div className="services-card h-100 d-flex justify-content-around align-items-center flex-column">
-            {services ? services.map((service, i) => {
-              return (
-                <div key={i} className="services-card-content">
-                  <span className="types-card-content-text">{service}</span>
-                </div>
-              )
-            }) : ""}
+          <div className="headerListItem">
+          <FontAwesomeIcon icon={faBook} />
+          <span>My Booking</span>
           </div>
-        </div>
-      </section>
+          <div className="headerListItem">
+          <FontAwesomeIcon icon={faPlane} />
+          <span>Flights</span>
+          </div>
       </div>
-      <div className="selector-container w-100 my-4 mx-3 mb-5 shadow-lg p-3 bg-white rounded ">
-        <button className='btn btn-dark mr-2' onClick={() => setSelectedCat("first")}>Show First class seats</button>
-        <button className='btn btn-dark mr-2' onClick={() => setSelectedCat("bussiness")}>Show Bussiness class seats</button>
-        <button className='btn btn-dark mr-2' onClick={() => setSelectedCat("economy")}>Show Economy class seats</button>
-        <button className='btn btn-success px-5' onClick={handleBook}>Book</button>
-        <section className='h-100 d-flex flex-column justify-content-center' >
-          <div className="class-container h-75 ">
-                {selectedCat === 'first' ? <ShowFirstClass seats={flight.totSeats[2]} booked={flight.bookedSeats} selected={{get: selectedSeats, set: setSelectedSeats}} /> : selectedCat === 'bussiness' ? 
-                <ShowBussinessClass seats={flight.totSeats[1]} selected={{get: selectedSeats, set: setSelectedSeats}} booked={flight.bookedSeats}/> 
-                : selectedCat === 'economy' ? <ShowEconomyClass selected={{get: selectedSeats, set: setSelectedSeats}} seats={flight.totSeats[0]} booked={flight.bookedSeats} /> : ""}
+      <div className='info-container d-flex justify-content-between h-100 pt-3'>
+        <div className='d-flex flex-column w-25 h-100'>
+        <section className="types d-inline-block w-auto h-50 m-3 shadow-lg p-3 bg-white rounded">
+          <div className="types-container h-100 d-flex justify-content-around align-items-center">
+            <div className="types-card h-100 d-flex justify-content-around align-items-center flex-column">
+              <div className="types-card-content d-flex flex-column align-items-center">
+                <img src={available} alt="available" style={{height: "50px", width: "50px"}} />
+                <span className="types-card-content-text">Available</span>
+              </div>
+              <div className="types-card-content d-flex flex-column align-items-center">
+                <img src={selected} alt="available" style={{height: "50px", width: "50px"}} />
+                <span className="types-card-content-text">Selected by you</span>
+              </div>
+              <div className="types-card-content d-flex flex-column align-items-center">
+                <img src={bookedSeat} alt="available" style={{height: "50px", width: "50px"}}/>
+                <span className="types-card-content-text">Booked by others</span>
+              </div>
+            </div>
           </div>
         </section>
+        <section className="services d-inline-block w-auto h-50 m-3 shadow-lg p-3 mb-5 bg-white rounded overflow-auto">
+        <div className="services-container h-100 d-flex flex-column">
+          <h4>Services:</h4>
+            <div className="services-card h-100 d-flex justify-content-around align-items-center flex-column">
+              {services ? services.map((service, i) => {
+                return (
+                  <div key={i} className="services-card-content">
+                    <span className="types-card-content-text">{service}</span>
+                  </div>
+                )
+              }) : ""}
+            </div>
+          </div>
+        </section>
+        </div>
+        <div className="selector-container w-100 my-3 mx-3 mb-5 shadow-lg p-3 bg-white rounded ">
+          <button className='btn btn-dark mr-2' onClick={() => setSelectedCat("first")}>Show First class seats</button>
+          <button className='btn btn-dark mr-2' onClick={() => setSelectedCat("bussiness")}>Show Bussiness class seats</button>
+          <button className='btn btn-dark mr-2' onClick={() => setSelectedCat("economy")}>Show Economy class seats</button>
+          <button className='btn btn-success px-5' onClick={handleBook}>Book</button>
+          <section className='h-100 d-flex flex-column justify-content-center' >
+            <div className="class-container h-75 ">
+                  {selectedCat === 'first' ? <ShowFirstClass seats={flight.totSeats[2]} booked={flight.bookedSeats} selected={{get: selectedSeats, set: setSelectedSeats}} /> : selectedCat === 'bussiness' ? 
+                  <ShowBussinessClass seats={flight.totSeats[1]} selected={{get: selectedSeats, set: setSelectedSeats}} booked={flight.bookedSeats}/> 
+                  : selectedCat === 'economy' ? <ShowEconomyClass selected={{get: selectedSeats, set: setSelectedSeats}} seats={flight.totSeats[0]} booked={flight.bookedSeats} /> : ""}
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   )
@@ -142,10 +201,10 @@ const ShowFirstClass = (props) => {
   }
 
   return (
-    <div className="first-class-card h-75 row row-cols-5 justify-content-center align-items-center">
+    <div className="first-class-card h-100 row row-cols-5 justify-content-center align-items-center overflow-auto">
     {seats.length > 1 ? seats.map((v, i) => {
       return (
-        <div key={i} className="first-class-card-content col h-50 w-100 text-center" onClick={(e) => handleClick("f", i+1, e)} role='button'>
+        <div key={i} className="first-class-card-content col h-auto w-100 text-center" onClick={(e) => handleClick("f", i+1, e)} role='button'>
           {booked.includes(`${i+1}`) ? 
           (
             <img src={bookedSeat} id='fSeat' alt="seat" style={{height: "100px", width: "100px"}} />
@@ -204,10 +263,10 @@ const ShowBussinessClass = (props) => {
   }
 
   return (
-    <div className="bussiness-class-card h-75 row row-cols-5 justify-content-center align-items-center">
+    <div className="bussiness-class-card h-100 row row-cols-5 justify-content-center align-items-center overflow-auto">
     {seats.map((v, i) => {
       return (
-        <div key={i} className="bussiness-class-card-content col h-25 w-100 text-center" onClick={(e) => handleClick("b", i+1, e)} role='button'>
+        <div key={i} className="bussiness-class-card-content col h-auto w-100 text-center" onClick={(e) => handleClick("b", i+1, e)} role='button'>
           {booked.includes(`${i+1}`) ? 
           (
             <img src={bookedSeat} id='bSeat' alt="seat" style={{height: "100px", width: "100px"}} />
@@ -266,10 +325,10 @@ const ShowEconomyClass = (props) => {
   }
 
   return (
-    <div className="economy-class-card h-75 row row-cols-5 justify-content-center align-items-center" >
+    <div className="economy-class-card h-100 row row-cols-5 justify-content-center align-items-center overflow-auto" >
     {seats.map((v, i) => {
       return (
-        <div key={i} className="economy-class-card-content col h-25 text-center"  onClick={(e) => handleClick("e", i+1, e)} role='button'>
+        <div key={i} className="economy-class-card-content col h-auto text-center"  onClick={(e) => handleClick("e", i+1, e)} role='button'>
          {booked.includes(`${i+1}`) ? 
           (
             <img src={bookedSeat} alt="seat" style={{height: "100px", width: "100px"}} />
